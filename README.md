@@ -3,13 +3,21 @@ title: EAP Quickstarts and OpenShift
 author: NAGANO Osamu, Red Hat
 description: 2023-12-25
 paginate: true
+headingDivider: 2
 ---
 
 # EAP Quickstarts and OpenShift
 
----
+## 関連リンク
 
-## 前提条件 1/2
+- GitHubの [onagano-rh/helloworld-html5](https://github.com/onagano-rh/helloworld-html5)
+  - [jboss-developer/jboss-eap-quickstarts](https://github.com/jboss-developer/jboss-eap-quickstarts)よりhelloworld-html5のみ抽出し改変したもの
+  - 本資料のソース (README.md) とそれを[Marp](https://marp.app/)でスライドに変換したもの (README.html) もある
+- [EAP 7.4の公式ドキュメント](https://access.redhat.com/documentation/ja-jp/red_hat_jboss_enterprise_application_platform/7.4)
+- [Think ITの記事](https://thinkit.co.jp/article/15696)
+  - 著者が書いたもので若干古いがまだ参考になる
+
+## 前提条件 1/3
 
 - Java 17
   - できればOpenJDK、もしくはOracle JDKかEclipse Adaptiumでもよい
@@ -23,9 +31,7 @@ Mavenに関してはZIP版をダウンロードしPATHを通すことが多い�
 
 Windows上では WSL2 の使用を想定している。
 
----
-
-## 前提条件 2/2
+## 前提条件 2/3
 
 Red Hatの製品版であることを前提としている。
 
@@ -40,7 +46,7 @@ Red Hatの製品版であることを前提としている。
 [eap-patch]: https://access.redhat.com/jbossnetwork/restricted/softwareDetail.html?softwareId=106090&product=appplatform&version=7.4&downloadType=patches
 [rh-registry]: https://catalog.redhat.com/software/containers/search
 
----
+## 前提条件 3/3
 
 Javaのメジャーバージョンの他は厳密に同じバージョンにする必要はない。
 
@@ -69,8 +75,6 @@ Kustomize Version: v5.0.1
 Kubernetes Version: v1.27.6+f67aeb3
 ```
 
----
-
 ## PowerPC上の制限ついて
 
 コンテナイメージはバイナリの実行可能ファイルの塊なので、CPUアーキテクチャごとにビルドされている必要がある。EAPに関してはサポートを謳っているので問題ないが、周辺ツールにはIntel系 (amd64) のイメージしか提供していないものが多い。
@@ -88,14 +92,12 @@ Kubernetes Version: v1.27.6+f67aeb3
 [nexus-operator]: https://catalog.redhat.com/software/containers/sonatype/nxrm-operator-certified/5e8f37f929373816429f8a5d?architecture=amd64&image=64c96dd0eb8acf63d5c3c78e
 [gitlab-operator]: https://catalog.redhat.com/software/containers/gitlab-org/cloud-native/gitlab-operator/635abba9025f95b198bd329e?architecture=amd64&image=63541508e961f7cb3446fddc
 
----
-
 ## EAP 7.4の累積パッチ摘要とJava 17対応
 
 EAPのローカルマシンへのインストールは本体 (jboss-eap-7.4.0.zip) を解凍するだけだが、追加で累積パッチの摘要とJava 17対応のパッチを当てる必要がある。
-### EAP本体のインストール
 
 ```shell
+# EAP本体のインストール
 $ unzip -q jboss-eap-7.4.0.zip
 $ cd jboss-eap-7.4
 $ ls -F
@@ -105,9 +107,7 @@ docs/       jboss-modules.jar  modules/     welcome-content/
 ```
 このディレクトリを以降 JBOSS_HOME (もしくはEAP_HOME) と呼ぶ。
 
----
-
-### 各種パッチの適用
+## 各種パッチの適用
 
 ```shell
 # 累積パッチの適用
@@ -132,8 +132,6 @@ One-off patches:     none
 $ ./bin/jboss-cli.sh --file=docs/examples/enable-elytron-se17.cli
 ```
 
----
-
 ## EAPの起動
 
 ```shell
@@ -151,8 +149,6 @@ $ bin/standalone.sh
 - ユーザのアプリは http://localhost:8080/ 以下のパスで提供される
 - 停止は Ctrl-C でよい
 
----
-
 ## サンプルプロジェクト集 Quickstarts のクローン
 
 JBOSS_HOMEとは別のディレクトリにGitHubからクローンしておく。
@@ -162,6 +158,8 @@ $ mkdir /some/where
 $ cd /some/where
 
 $ git clone https://github.com/jboss-developer/jboss-eap-quickstarts.git
+
+# ブランチが 7.4.x ではなかった場合は `git checkout 7.4.x` も実行しておく
 
 # このディレクトリを QUICKSTART_HOME と呼ぶこともある
 $ cd jboss-eap-quickstarts
@@ -174,8 +172,6 @@ GitHubからクローンするのではなく、EAP本体と同じくカスタ�
 
 [eap-qs-dl]: https://access.redhat.com/jbossnetwork/restricted/softwareDetail.html?softwareId=99461&product=appplatform&version=7.4&downloadType=distributions
 
-___
-
 ## Quickstarts
 
 EAPだけでなくRed Hatのミドルウェアにはその使い方を端的に示すためのサンプルプロジェクト集が提供されている。EAPを起動しておき、興味あるプロジェクトの中で `mvn package wildfly:deploy` とするだけで十分なものがほとんどである。
@@ -187,8 +183,6 @@ EAPだけでなくRed Hatのミドルウェアにはその使い方を端的に�
   - JAX-RS: REST APIを作るためのフレームワーク
 
 EAPはデフォルトでH2と呼ばれるテスト用のDBを内臓しているので、外部にDBを用意しなくともDBを使うサンプルプロジェクトを動かすことができる。
-
----
 
 ## 自分用にコピーを作成する
 
@@ -208,8 +202,6 @@ $ vi pom.xml
 +:  <relativePath>pom-parent.xml</relativePath>
 ```
 
----
-
 ## helloworld-html5のビルドとデプロイ
 
 ```shell
@@ -221,8 +213,6 @@ $ mvn wildfly:deploy
 ```
 
 EAPのログにデプロイが行われたことを表すログが出力され、 http://localhost:8080/helloworld-html5 でこのアプリにアクセス可能になる。
-
----
 
 ## 参考: mvnの便利なコマンド集
 
@@ -236,7 +226,15 @@ EAPのログにデプロイが行われたことを表すログが出力され�
 - `mvn package -Dmaven.test.skip`
   - テストの依存性のダウンロードもせずにビルドのみを実行
 
----
+## 参考: 開発時の展開形式のデプロイ
+
+コードに変更を行う度に `mvn wildfly:deploy` でデプロイを行うのは効率が悪い。
+Mavenが生成する `./target/helloworld-html5` を直接 `$JBOSS_HOME/standalone/deployments/` に置いてそれを認識させる方法もある。
+
+- [Managing exploded deployments in WildFly](https://www.mastertheboss.com/jbossas/jboss-deploy/managing-exploded-deployments-in-wildfly/)
+
+これならばより実行の速い `mvn compile` やIDEの自動コンパイル機能だけで変更を反映できる。
+EAPのクラウドネイティブ版とも言えるQuarkusではこの開発サイクルの短縮化がより進んでいる。
 
 ## helloworld-html5用のGitリポジトリの作成
 
@@ -260,8 +258,6 @@ $ git push -u origin main
 
 後でOpenShiftはこのリポジトリからコードを取得しビルドおよびデプロイすることになる。
 
----
-
 ## OpenShiftでの実行
 
 開発者向けのアカウントですでに `oc login` コマンドでOpenShiftにログイン済みとする。ここでの作業用にプロジェクト（名前空間）を一つ作成する。
@@ -281,8 +277,6 @@ $ oc status
 ```
 
 複数のユーザで同時に作業している場合はプロジェクト名（ここではmyproj）が被らないようにする。
-
----
 
 ## 現在のプロジェクトにImageStreamとTemplateを導入
 
@@ -319,8 +313,6 @@ eap74-sso-s2i              An example JBoss Enterprise Application Platform appl
 
 これらは`openshift`名前空間にすでに存在することもあるが古かったりするので独自に取得する。また自分の名前空間に置くことで直接編集することもできる。
 
----
-
 ## 何を行ったのか
 
 - ImageStream
@@ -330,8 +322,6 @@ eap74-sso-s2i              An example JBoss Enterprise Application Platform appl
     - DeploymentConfigの変わりにDeploymentが推奨になったが、当面は使い続けられる
   - 似た技術としてHelmやKustomizeなどがあるが、Templateは単純なので直感的に理解できる
   - `oc describe template <name>` や `oc get template <name> -o yaml` で中身を確認するとよい
-
----
 
 ## oc nw-appコマンドによるビルドとデプロイ
 
@@ -355,8 +345,6 @@ $ oc new-app --template=eap74-basic-s2i \
 
 Nexusを用意してそれを `MAVEN_MIRROR_URL` に設定しないと毎回ライブラリをインターネットからダウンロードすることになるのでビルドが遅くなる点には注意が必要。
 
----
-
 ## デプロイされたアプリにアクセス
 
 ビルドもデプロイも正常に終了すると、デプロイようのポッドのStatusが"Running"になる。Routeを確認してブラウザでアクセスしてみる。
@@ -376,8 +364,6 @@ myapp   myapp-myproj.apps-crc.testing          myapp      <all>   edge/Redirect 
 # ブラウザで https://myapp-myproj.apps-crc.testing/ にアクセスしてみる。
 ```
 
----
-
 ## コードの修正と再ビルドの例 1/2
 
 デフォルトのhelloworld-html5はhttpでの動作を前提にしているので、OpenShiftのhttpsでのアクセスでは動作しない。このバグを修正しGitHubにコミットして、新しいコードを使ったビルドおよびデプロイを行う。
@@ -390,8 +376,6 @@ $ git commit -m "jQueryをhttpではなくhttpsで取得するよう変更"
 $ git push
 ```
 
----
-
 ## コードの修正と再ビルドの例 2/2
 
 ```shell
@@ -399,15 +383,14 @@ $ git push
 $ oc get bc
 
 # 再ビルド (--followによりログも確認できる)
-$ oc start-build myapp-build-artifacts --follow
+# クラスファイルの削除がなく作成や更新のみの場合は --incremental によりビルドが速くなる
+$ oc start-build myapp-build-artifacts --incremental --follow
 
 # 新しいビルドが正常終了すると、イメージの変更を検出し自動で新しいデプロイも始まる
 $ oc get pod -w
 ```
 
 GitHubのリポジトリでWebhookを設定すれば手動で`oc start-build`する必要はなくなるが、OpenShiftがインターネットからアクセス可能である必要がある。
-
----
 
 ## その他のQuickstartsプロジェクトについて
 
@@ -422,8 +405,6 @@ GitHubのリポジトリでWebhookを設定すれば手動で`oc start-build`す
 
 [todob-client]: https://todobackend.com/client/index.html
 
----
-
 ## 参考: EAP 7.4の他の選択肢について
 
 - EAP 8.0
@@ -432,9 +413,8 @@ GitHubのリポジトリでWebhookを設定すれば手動で`oc start-build`す
 - Quarkus
   - Springの対抗馬としてRed Hatが中心となって開発している
   - EAPやSpringよりも軽量で圧倒的に使いやすい
+    - 特にコードの変更が再デプロイや再起動なしに反映されるDev-mode
   - CDIやJPA、JAX-RSといった基本APIはJava EEと同じで、EAPから移行しやすい
-
----
 
 ## 参考: 他のプログラミング言語の例
 
