@@ -115,7 +115,7 @@ $ ./bin/jboss-cli.sh
 grep: warning: stray \ before -
 grep: warning: stray \ before -
 You are disconnected at the moment. Type 'connect' to connect to the server or 'help' for the list of supported commands.
-[disconnected /] patch apply /path/to/jboss-eap-7.4.14-patch.zip
+[disconnected /] patch apply ~/Downloads/jboss-eap-7.4.14-patch.zip
 {
     "outcome" : "success",
     "result" : {}
@@ -154,8 +154,8 @@ $ bin/standalone.sh
 JBOSS_HOMEとは別のディレクトリにGitHubからクローンしておく。
 
 ```shell
-$ mkdir /some/where
-$ cd /some/where
+$ mkdir ~/work
+$ cd ~/work
 
 $ git clone https://github.com/jboss-developer/jboss-eap-quickstarts.git
 
